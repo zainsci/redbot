@@ -34,4 +34,8 @@ if req.status_code == 200:
         for q in LOOK_QUES:
             if q in title:
                 popup_window(title, link)
-                sleep(600)
+                next_post = input("Next? Y / Enter")
+                if next_post in ["Y", "y"]:
+                    pass
+                else:
+                    sleep(600)
