@@ -1,7 +1,5 @@
 from popup import popup_window
 import requests
-import argparse
-import tkinter as tk
 from time import sleep
 
 # parser = argparse.ArgumentParser(description="RedditBot for subreddits")
@@ -9,9 +7,7 @@ from time import sleep
 
 
 SUB_REDDIT = "AskReddit"
-
 RED_URL = f"https://www.reddit.com/r/{SUB_REDDIT}/new/.json?limit=50"
-
 LOOK_QUES = ["What is", "What will", "What would", "What are", "What's", "You"]
 
 headers = {
@@ -19,23 +15,23 @@ headers = {
 }
 
 
-req = requests.get(RED_URL, headers=headers)
+def scrape_askreddit():
+    req = requests.get(RED_URL, headers=headers)
 
-if req.status_code == 200:
-    req = req.json()
-    data = req["data"]
-    data = data["children"]
+    if req.status_code == 200:
+        req = req.json()
+        data = req["data"]
+        data = data["children"]
 
-    for post in data:
-        print(post["data"]["title"])
-        title = post["data"]["title"]
-        link = post["data"]["permalink"]
+        for post in data:
+            print(post["data"]["title"])
+            title = post["data"]["title"]
+            link = post["data"]["permalink"]
 
-        for q in LOOK_QUES:
-            if q in title:
-                popup_window(title, link)
-                next_post = input("Next? Y / Enter")
-                if next_post in ["Y", "y"]:
-                    pass
-                else:
-                    sleep(600)
+            for q in LOOK_QUES:
+                if q in title:
+                    popup_window(title, link)
+
+
+if __name__ == "__main__":
+    scrape_askreddit()
