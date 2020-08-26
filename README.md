@@ -2,6 +2,11 @@
 
 My personal RedditBot.
 
+## Objectives
+
+1. Learn Tkinter to make GUIs
+2. Learn Lambda Functions
+
 ## What this Reddit Bot does?
 
 1. Reads the specified one or more subreddits for new submissions.
