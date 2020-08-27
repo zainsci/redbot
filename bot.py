@@ -53,7 +53,7 @@ def convert_time(time):
     return time
 
 
-def parse_req(response, keyword, flare):
+def parse_req(response, keyword, flare, interval):
     if len(response) <= 0:
         print("No response")
         return
@@ -68,9 +68,9 @@ def parse_req(response, keyword, flare):
                 time = convert_time(post["data"]["created_utc"])
                 link = post["data"]["permalink"]
 
-                notification(sub, title, score, comments, time, link)
+                notification(sub, title, score, comments, time, link, interval)
 
-    elif keyword == None:
+    elif keyword:
         for post in response:
             sub = post["data"]["subreddit"]
             title = post["data"]["title"]
@@ -79,9 +79,8 @@ def parse_req(response, keyword, flare):
             time = convert_time(post["data"]["created_utc"])
             link = post["data"]["permalink"]
 
-            for q in QUESTIONS:
-                if q in title:
-                    notification(sub, title, score, comments, time, link)
+            if keyword in title.split():
+                notification(sub, title, score, comments, time, link, interval)
 
     else:
         for post in response:
@@ -92,8 +91,10 @@ def parse_req(response, keyword, flare):
             time = convert_time(post["data"]["created_utc"])
             link = post["data"]["permalink"]
 
-            if keyword in title:
-                notification(sub, title, score, comments, time, link)
+            for q in QUESTIONS:
+                if q in title:
+                    notification(sub, title, score, comments,
+                                 time, link, interval)
 
 
 def main():
@@ -108,10 +109,12 @@ def main():
                         help="Any specific keyword to search for")
     parser.add_argument("--flare", type=str, default=None,
                         help="Falre to lookup for")
+    parser.add_argument("--interval", type=int, default=None,
+                        help="Set timer between each post that appears")
     args = parser.parse_args()
 
     response = make_request(args)
-    parse_req(response, args.keyword, args.flare)
+    parse_req(response, args.keyword, args.flare, args.interval)
 
 
 if __name__ == "__main__":

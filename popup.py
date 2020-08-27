@@ -4,18 +4,19 @@ import webbrowser
 from time import sleep
 
 
-def open_reddit(permalink, window):
+def open_reddit(permalink, window, interval):
     webbrowser.open(f"https://www.reddit.com{permalink}")
     window.destroy()
-    print("If Commenting Wait 10Min")
-    sleep(600)
+    if interval != None:
+        print(f"If Commenting Wait {interval / 60} Min")
+        sleep(int(interval))
 
 
 def next_post(window):
     window.destroy()
 
 
-def notification(sub, title, score, comments, time, permalink):
+def notification(sub, title, score, comments, time, permalink, interval):
     win = tk.Tk()
     win.title("Reddit Notification")
 
@@ -45,7 +46,7 @@ def notification(sub, title, score, comments, time, permalink):
     btn_group = tk.Frame(win, padx=10, pady=5)
     btn_group.pack(padx=10, pady=10)
 
-    ttk.Button(btn_group, text="Open", command=lambda: open_reddit(permalink, win)).grid(
+    ttk.Button(btn_group, text="Open", command=lambda: open_reddit(permalink, win, interval)).grid(
         row=0, column=0, padx=10, pady=5)
     ttk.Button(btn_group, text="Next", command=lambda: next_post(win)).grid(
         row=0, column=1, padx=10, pady=5)
