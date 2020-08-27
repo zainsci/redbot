@@ -15,48 +15,44 @@ def next_post(window):
     window.destroy()
 
 
-def popup_window(title, permalink):
+def popUpWindow(sub, title, score, comments, time, permalink):
+    win = tk.Tk()
+    win.title("Reddit Notification")
 
-    window = tk.Tk()
-    window.geometry("400x200")
-    window.title("Reddit Notification")
+    group = tk.LabelFrame(win, text=sub, padx=10,
+                          pady=10)
+    group.pack(padx=10, pady=10)
+    tk.Label(
+        group, text=title, font=(None, 12), wraplength=300, anchor="n").grid(row=0, column=1, pady=12, sticky='n')
+    inner_group = tk.Frame(group, padx=10, pady=10)
+    inner_group.grid(row=0, column=0)
 
-    btn_style = ttk.Style()
-    btn_style.map("C.TButton",)
+    lbl_1 = tk.LabelFrame(inner_group, text="Score", padx=5)
+    tk.Label(lbl_1, text=score).pack(pady=5)
 
-    main_frame = tk.Frame(window)
-    main_frame.pack()
+    lbl_2 = tk.LabelFrame(inner_group, text="Comments", padx=5)
+    tk.Label(lbl_2, text=comments).pack(pady=5)
 
-    frame = tk.Frame(main_frame)
-    frame.grid(row=0, column=0)
-    btn_frame = tk.Frame(main_frame)
-    btn_frame.grid(row=1, column=0)
+    lbl_3 = tk.LabelFrame(inner_group, text="Time", padx=5)
+    tk.Label(lbl_3, text=time).pack(pady=5)
 
-    lbl_title = ttk.Label(
-        frame,
-        text=title,
-        wraplength=300,
-        font=(None, 14),
-        justify=tk.CENTER,
-    )
-    btn_open = ttk.Button(
-        btn_frame,
-        text="Open",
-        command=lambda: open_reddit(permalink, window),
-        style="C.TButton"
-    )
-    btn_next = ttk.Button(btn_frame, text="Next",
-                          command=lambda: next_post(window))
+    lbl = [lbl_1, lbl_2, lbl_3]
+    for i in lbl:
+        i.grid(sticky="nswe")
+        i.rowconfigure(0, weight=1)
+        i.columnconfigure(0, weight=1)
 
-    lbl_title.grid(row=0, column=0, pady=20)
-    btn_open.grid(row=0, column=0, padx=10)
-    btn_next.grid(row=0, column=1, padx=10)
+    btn_group = tk.Frame(win, padx=10, pady=5)
+    btn_group.pack(padx=10, pady=10)
 
-    window.mainloop()
+    ttk.Button(btn_group, text="Open", command=lambda: open_reddit(permalink, win)).grid(
+        row=0, column=0, padx=10, pady=5)
+    ttk.Button(btn_group, text="Next", command=lambda: next_post(win)).grid(
+        row=0, column=1, padx=10, pady=5)
+
+    win.mainloop()
 
 
 if __name__ == "__main__":
-    popup_window(
-        title="How To Work With TkinterHow To Work With TkinterHow To Work With TkinterHow To Work With Tkinter",
-        permalink="/r/Askreddit",
-    )
+    popUpWindow("Tkinter", "Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter",
+                "20K", "2.1K", "15:15 PM", "Link")
