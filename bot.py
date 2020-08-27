@@ -1,6 +1,7 @@
-from popup import popup_window
+from popup import notification
 import requests
 import argparse
+from datetime import datetime
 
 
 headers = {
@@ -36,6 +37,22 @@ def make_request(args):
             return response
 
 
+def k_or_m(value):
+    if int(value) > 1000000:
+        value = int(value) / 1000000
+        return str(value) + "M"
+    elif int(value) > 1000:
+        score = int(value) / 1000
+        return str(value) + "K"
+    else:
+        return value
+
+
+def convert_time(time):
+    time = datetime.fromtimestamp(time).strftime("%H:%M")
+    return time
+
+
 def parse_req(response, keyword, flare):
     if len(response) <= 0:
         print("No response")
@@ -44,28 +61,39 @@ def parse_req(response, keyword, flare):
     elif flare:
         for post in response:
             if flare == post["data"]["link_flair_text"]:
+                sub = post["data"]["subreddit"]
                 title = post["data"]["title"]
+                score = k_or_m(post["data"]["score"])
+                comments = k_or_m(post["data"]["num_comments"])
+                time = convert_time(post["data"]["created_utc"])
                 link = post["data"]["permalink"]
 
-                popup_window(title, link)
+                notification(sub, title, score, comments, time, link)
 
     elif keyword == None:
         for post in response:
+            sub = post["data"]["subreddit"]
             title = post["data"]["title"]
+            score = k_or_m(post["data"]["score"])
+            comments = k_or_m(post["data"]["num_comments"])
+            time = convert_time(post["data"]["created_utc"])
             link = post["data"]["permalink"]
 
             for q in QUESTIONS:
                 if q in title:
-                    popup_window(title, link)
+                    notification(sub, title, score, comments, time, link)
 
     else:
         for post in response:
+            sub = post["data"]["subreddit"]
             title = post["data"]["title"]
+            score = k_or_m(post["data"]["score"])
+            comments = k_or_m(post["data"]["num_comments"])
+            time = convert_time(post["data"]["created_utc"])
             link = post["data"]["permalink"]
-            print(title)
 
             if keyword in title:
-                popup_window(title, link)
+                notification(sub, title, score, comments, time, link)
 
 
 def main():

@@ -15,7 +15,7 @@ def next_post(window):
     window.destroy()
 
 
-def popUpWindow(sub, title, score, comments, time, permalink):
+def notification(sub, title, score, comments, time, permalink):
     win = tk.Tk()
     win.title("Reddit Notification")
 
@@ -54,5 +54,5 @@ def popUpWindow(sub, title, score, comments, time, permalink):
 
 
 if __name__ == "__main__":
-    popUpWindow("Tkinter", "Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter",
-                "20K", "2.1K", "15:15 PM", "Link")
+    notification("Tkinter", "Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter Tkinter",
+                 "20K", "2.1K", "15:15 PM", "Link")
