@@ -2,6 +2,7 @@ from popup import notification
 import requests
 import argparse
 from datetime import datetime
+from time import sleep
 
 
 headers = {
@@ -22,7 +23,10 @@ def make_request(args):
             "limit": args.limit,
         }
         req = requests.get(
-            f"https://www.reddit.com/r/{args.sub}/{args.time}/.json", headers=headers, params=params)
+            f"https://www.reddit.com/r/{args.sub}/{args.time}/.json",
+            headers=headers,
+            params=params,
+        )
         if req.status_code == 200:
             req = req.json()
             response = req["data"]["children"]
@@ -30,7 +34,8 @@ def make_request(args):
 
     else:
         req = requests.get(
-            f"https://www.reddit.com/r/{args.sub}/.json", headers=headers)
+            f"https://www.reddit.com/r/{args.sub}/.json", headers=headers
+        )
         if req.status_code == 200:
             req = req.json()
             response = req["data"]["children"]
@@ -93,24 +98,31 @@ def parse_req(response, keyword, flare, interval):
 
             for q in QUESTIONS:
                 if q in title:
-                    notification(sub, title, score, comments,
-                                 time, link, interval)
+                    notification(sub, title, score, comments, time, link, interval)
 
 
 def main():
     parser = argparse.ArgumentParser(description="RedditBot for subreddits")
-    parser.add_argument("--sub", type=str, default=None,
-                        help="SubReddit to search for")
-    parser.add_argument("--limit", type=int, default=None,
-                        help="No of posts to search through at a time")
-    parser.add_argument("--time", type=str, default=None,
-                        help="Hot, New, Top or Rising posts")
-    parser.add_argument("--keyword", type=str, default=None,
-                        help="Any specific keyword to search for")
-    parser.add_argument("--flare", type=str, default=None,
-                        help="Falre to lookup for")
-    parser.add_argument("--interval", type=int, default=None,
-                        help="Set timer between each post that appears")
+    parser.add_argument("--sub", type=str, default=None, help="SubReddit to search for")
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="No of posts to search through at a time",
+    )
+    parser.add_argument(
+        "--time", type=str, default=None, help="Hot, New, Top or Rising posts"
+    )
+    parser.add_argument(
+        "--keyword", type=str, default=None, help="Any specific keyword to search for"
+    )
+    parser.add_argument("--flare", type=str, default=None, help="Falre to lookup for")
+    parser.add_argument(
+        "--interval",
+        type=int,
+        default=None,
+        help="Set timer between each post that appears",
+    )
     args = parser.parse_args()
 
     response = make_request(args)
@@ -118,4 +130,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        main()
+        sleep(600)
